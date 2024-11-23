@@ -49,15 +49,13 @@ app.add_url_rule(
 )
 
 def remote_js():
-    js_script = """
-    // Exemplo de código JavaScript
-    console.log('Hello from Flask!');
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM completamente carregado e analisado!');
-    });
-    """
+    file_path = "scripts/tripadvisor_pt/injectedJS.js"
+    
+    js_content = ""
+    with open(file_path, "r", encoding="utf-8") as file:
+        js_content = file.read()
     # Criar uma resposta com o tipo de conteúdo apropriado
-    response = Response(js_script, mimetype='application/javascript')
+    response = Response(js_content, mimetype='application/javascript')
     response.headers['Cache-Control'] = 'public, max-age=3600'  # Cache por 1 hora
     return response
 
