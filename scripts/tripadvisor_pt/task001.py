@@ -2,8 +2,7 @@ from fn.helper import *
 
 class UserTask:
     """Class for user-defined custom actions."""
-    def __init__(self, automation):
-        self.automation = automation
+    def __init__(self):
         ROOT_FOLDER = "C:/Users/webmaster/Documents/project/webscam/tmp"
         self.wa = WebAutomation(ROOT_FOLDER)
 

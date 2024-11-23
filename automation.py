@@ -15,11 +15,8 @@ class Automation:
     def run(self):
         """Sets up folders, executes actions, and checks downloads."""
         self.perform_actions()
+        
+        user_actions = task001.UserTask()
+        user_actions.execute_custom_actions()
 
-# Main script
-if __name__ == "__main__":
-    automation = Automation()
-
-    # Execute additional user actions
-    user_actions = task001.UserTask(automation)
-    user_actions.execute_custom_actions()
+auto = Automation()

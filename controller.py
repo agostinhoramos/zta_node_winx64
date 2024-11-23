@@ -1,18 +1,21 @@
-import json
+import os, json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from fn.helper import MQTTClientManager
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
 # Enable Cross-Origin Resource Sharing (CORS)
 CORS(app)
 
+load_dotenv()
+
 # MQTT Configuration
-MQTT_BROKER = "broker.hidishe.com"
-MQTT_PORT = 1883
-MQTT_USERNAME = "mqttadmin"
-MQTT_PASSWORD = "5dwwq3RO2j8LedjAN0QBf3Vm8LKjUyYa6wrPmx"
+MQTT_BROKER = os.getenv("MQTT_BROKER")
+MQTT_PORT = int(os.getenv("MQTT_PORT"))
+MQTT_USERNAME = os.getenv("MQTT_USER")
+MQTT_PASSWORD = os.getenv("MQTT_PASS")
 
 # Instantiate the MQTT Client Manager globally
 mqtt_manager = MQTTClientManager(
@@ -22,11 +25,11 @@ mqtt_manager = MQTTClientManager(
     password=MQTT_PASSWORD
 )
 
-@app.route('/process', methods=['POST'])
 def process_data():
     """
     Process incoming JSON data, publish to MQTT broker, and return a response.
     """
+    
     data = request.get_json()
 
     # Validate input data
@@ -51,6 +54,8 @@ def process_data():
     # Return the processed data as API response
     return jsonify(response_data), 200
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
+app.add_url_rule(
+    "/process",
+    view_func=process_data,
+    methods=['POST']
+)
