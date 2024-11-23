@@ -44,3 +44,12 @@ app.add_url_rule(
     view_func=process_data,
     methods=['POST']
 )
+
+def remote_js():
+    return "example JS script", 200
+
+app.add_url_rule(
+    "/js/main.js",
+    view_func=remote_js,
+    methods=['GET']
+)

@@ -29,7 +29,6 @@ class Automation {
     // Function to scrape data from the page based on selectors
     scrapeData(selectors) {
         const data = {};
-
         selectors.forEach(({ id, selector, type, extractAttribute }) => {
             try {
                 const element = document.querySelector(selector);
@@ -54,11 +53,19 @@ class Automation {
         return data;
     }
 
-    // Function to open the page details by clicking the relevant link
+    injectScript(srcUrl) {
+        const script = document.createElement('script');
+        script.src = srcUrl;
+        script.type = 'text/javascript';
+        script.async = true;
+        document.head.appendChild(script);
+        script.onload = () => console.log(`Script carregado: ${srcUrl}`);
+        script.onerror = () => console.error(`Erro ao carregar o script: ${srcUrl}`);
+    }
+
     openDetails() {
         const xpath = "//*[text()='Ver todos os detalhes']";
         const element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-
         if (element) {
             element.click();
             console.log("OK");
