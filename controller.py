@@ -1,9 +1,12 @@
 import os, json
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
+from flask_talisman import Talisman
 from fn.helper import MQTTClientManager
 
 app = Flask(__name__)
+
+Talisman(app, content_security_policy=None)
 
 # Enable Cross-Origin Resource Sharing (CORS)
 CORS(app)
