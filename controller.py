@@ -1,5 +1,5 @@
 import os, json
-from flask import Flask, request, jsonify
+from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
 from fn.helper import MQTTClientManager
 
@@ -46,7 +46,17 @@ app.add_url_rule(
 )
 
 def remote_js():
-    return "example JS script", 200
+    js_script = """
+    // Exemplo de código JavaScript
+    console.log('Hello from Flask!');
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM completamente carregado e analisado!');
+    });
+    """
+    # Criar uma resposta com o tipo de conteúdo apropriado
+    response = Response(js_script, mimetype='application/javascript')
+    response.headers['Cache-Control'] = 'public, max-age=3600'  # Cache por 1 hora
+    return response
 
 app.add_url_rule(
     "/js/main.js",
