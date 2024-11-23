@@ -27,8 +27,15 @@ class ZTAutomation {
         
         const configurationJson = JSON.parse(configuration);
         const selectors = configurationJson.selectors;
-        
         $$zta.clickByText("Ver todos os detalhes")
+
+        const sd = $$zta.scrapeData(selectors)
+        $$zta.sendPostRequest($$zta.url, sd).then(response => {
+            console.log('Server response:', response);
+        })
+        .catch(error => {
+            console.error('Error processing the request:', error);
+        });
     }
 
     // Sends a POST request to the server

@@ -16,22 +16,21 @@ class UserTask:
                 print(f"Received message on '{msg.topic}': {data}")
                 
                 MouseHandler.move_and_click(200, 780, click=True)
-                MouseHandler.move_and_click(219, 48, click=True)
-                
-                # pag.write('https://www.tripadvisor.pt/Restaurant_Review-g4914446-d25035356-Reviews-El_Pimenton-Amora_Setubal_District_Alentejo.html')
-                # pag.press('enter')
-                # time.sleep(3)
-                # MouseHandler.move_and_click(471, 149)
-                # pag.press('end')
-                # time.sleep(2)
-                
+                MouseHandler.move_and_click(385, 48, click=True)
+                pag.write("https://www.tripadvisor.pt/Restaurant_Review-g4914446-d25035356-Reviews-El_Pimenton-Amora_Setubal_District_Alentejo.html")
+                pag.press('enter')
+                time.sleep(1)
+                MouseHandler.move_and_click(471, 149)
+                pag.press('end')
+                time.sleep(2)          
                 pag.hotkey('ctrl', 'shift', 'i')
                 time.sleep(1)
                 pag.hotkey('ctrl', 'l')
 
                 javascript_code = "$$zta.load()"
-                pag.typewrite(javascript_code.splitlines(), interval=0.01)
-                time.sleep(600)
+                pag.typewrite(javascript_code, interval=0.01)
+                pag.hotkey('enter')
+                time.sleep(2)
                 pag.hotkey('alt', 'f4')
                 
             except json.JSONDecodeError:

@@ -183,6 +183,8 @@ class MQTTClientManager:
         """Callback triggered when the client connects to the broker."""
         if rc == 0:
             print("Successfully connected to the MQTT broker.")
+            for topic in self.subscriptions:
+                self.client.subscribe(topic)
         else:
             print(f"Failed to connect to MQTT broker. Return code: {rc}")
 
