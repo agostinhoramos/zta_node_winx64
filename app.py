@@ -11,7 +11,7 @@ def main():
     print(f"Starting **{PROJECT_NAME}** server\n")
     
     func_threads = [
-        [ControllerApp.run, (), {'host': '0.0.0.0', 'port': 7100}],
+        [ControllerApp.run, (), {'host': '0.0.0.0', 'port': 5000}],
         [WorkerAuto.run, (), {}],
     ]
 

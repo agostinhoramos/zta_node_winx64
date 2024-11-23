@@ -7,6 +7,9 @@ import os, re, json
 import shutil
 from pathlib import Path
 import paho.mqtt.client as mqtt
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class MouseHandler:
     """Handles mouse actions."""
@@ -157,78 +160,91 @@ class WebAutomation:
             pag.typewrite(char, interval=0.01)
 
 class MQTTClientManager:
-    """
-    A class to manage MQTT client operations including connecting, subscribing, receiving, and publishing messages.
-    """
-    def __init__(self, broker, port, username, password, keepalive=60):
-        self.broker = broker
-        self.port = port
-        self.username = username
-        self.password = password
-        self.keepalive = keepalive
-        self.client = mqtt.Client()
+    """Handles MQTT operations: connect, publish, and subscribe."""
 
-        # Configure the client callbacks
+    def __init__(self):
+        self.broker = os.getenv("MQTT_BROKER")
+        self.port = int(os.getenv("MQTT_PORT"))
+        self.username = os.getenv("MQTT_USER")
+        self.password = os.getenv("MQTT_PASS")
+        self.keepalive = int(os.getenv("MQTT_KEEPALIVE"))
+        self.client = mqtt.Client()
+        self.subscriptions = []  # Track subscribed topics to avoid duplication
+
+        # Set username and password for the broker
+        if self.username and self.password:
+            self.client.username_pw_set(self.username, self.password)
+
+        # Attach default callbacks
         self.client.on_connect = self._on_connect
         self.client.on_message = self._on_message
 
-        # Set username and password for the broker
-        self.client.username_pw_set(username, password)
-
     def _on_connect(self, client, userdata, flags, rc):
-        """
-        Callback triggered when the client connects to the MQTT broker.
-        """
+        """Callback triggered when the client connects to the broker."""
         if rc == 0:
-            print("Successfully connected to the MQTT broker")
-            # Automatically subscribe to a test topic upon connection
-            self.client.subscribe("test/topic")
+            print("Successfully connected to the MQTT broker.")
         else:
-            print(f"Failed to connect to the MQTT broker, result code: {rc}")
+            print(f"Failed to connect to MQTT broker. Return code: {rc}")
 
     def _on_message(self, client, userdata, msg):
-        """
-        Callback triggered when a message is received from the subscribed topic.
-        """
+        """Callback triggered when a message is received."""
         try:
-            payload = msg.payload.decode('utf-8')  # Decode the message payload
-            data = json.loads(payload)  # Parse the payload as JSON
-            print(f"Received message: {data} from topic: {msg.topic}")
+            payload = msg.payload.decode("utf-8")
+            data = json.loads(payload)
+            print(f"Received message on '{msg.topic}': {data}")
+        except json.JSONDecodeError:
+            print(f"Received non-JSON message on '{msg.topic}': {msg.payload}")
         except Exception as e:
-            print(f"Error parsing message: {e}")
+            print(f"Error processing message: {e}")
 
     def connect(self):
-        """
-        Connect to the MQTT broker and start the client loop.
-        """
+        """Connects to the MQTT broker."""
         try:
             self.client.connect(self.broker, self.port, self.keepalive)
-            self.client.loop_start()
-            print("MQTT client loop started")
+            self.client.loop_start()  # Start the network loop in a background thread
+            print("MQTT client loop started.")
         except Exception as e:
-            print(f"Error connecting to the MQTT broker: {e}")
+            print(f"Error connecting to MQTT broker: {e}")
 
-    def publish(self, topic, message, qos=0):
-        """
-        Publish a message to a specified topic.
-        """
+    def publish(self, topic, message):
+        """Publishes a message to a specified topic."""
         try:
-            result = self.client.publish(topic, message, qos=qos)
+            result = self.client.publish(topic, json.dumps(message))
             status = result[0]
             if status == 0:
-                print(f"Message '{message}' successfully sent to topic '{topic}'")
+                print(f"Message published to '{topic}': {message}")
             else:
-                print(f"Failed to send message to topic '{topic}'")
+                print(f"Failed to publish message to '{topic}'.")
         except Exception as e:
             print(f"Error publishing message: {e}")
 
+    def subscribe(self, topic):
+        """
+        Subscribes to a specific topic.
+        Avoids duplicate subscriptions by checking the internal list.
+        """
+        if topic not in self.subscriptions:
+            try:
+                self.client.subscribe(topic)
+                self.subscriptions.append(topic)
+                print(f"Subscribed to '{topic}'.")
+            except Exception as e:
+                print(f"Error subscribing to '{topic}': {e}")
+        else:
+            print(f"Already subscribed to '{topic}'.")
+
     def stop(self):
-        """
-        Stop the MQTT client loop and disconnect from the broker.
-        """
+        """Stops the MQTT client loop and disconnects from the broker."""
         try:
             self.client.loop_stop()
             self.client.disconnect()
-            print("MQTT client disconnected and loop stopped")
+            print("MQTT client disconnected.")
         except Exception as e:
-            print(f"Error stopping the MQTT client: {e}")
+            print(f"Error stopping MQTT client: {e}")
+
+# Example usage:
+# manager = MQTTClientManager()
+# manager.connect()
+# manager.subscribe("example/topic")
+# manager.publish("example/topic", {"key": "value"})
+# manager.stop()
