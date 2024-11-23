@@ -241,10 +241,3 @@ class MQTTClientManager:
             print("MQTT client disconnected.")
         except Exception as e:
             print(f"Error stopping MQTT client: {e}")
-
-# Example usage:
-# manager = MQTTClientManager()
-# manager.connect()
-# manager.subscribe("example/topic")
-# manager.publish("example/topic", {"key": "value"})
-# manager.stop()
