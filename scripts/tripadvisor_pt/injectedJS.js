@@ -3,7 +3,7 @@ class ZTAutomation {
         this.url = 'https://192.168.1.87:5000/process';  // Server URL
     }
 
-    load(){
+    async load(){
         const configuration = `{
             "_id": "tripadvisor_pt",
             "startUrl": ["https://www.tripadvisor.pt/Restaurant_Review-g4914446-d25035356-Reviews-El_Pimenton-Amora_Setubal_District_Alentejo.html"],
@@ -27,6 +27,11 @@ class ZTAutomation {
         
         const configurationJson = JSON.parse(configuration);
         const selectors = configurationJson.selectors;
+
+        await $$zta.sleep(2000)
+
+        $$zta.scrollToBottom();
+
         $$zta.clickByText("Ver todos os detalhes")
 
         const sd = $$zta.scrapeData(selectors)
@@ -96,6 +101,22 @@ class ZTAutomation {
         } else {
             console.error(`NOK: Element with text '${text}' not found.`);
         }
+    }
+
+    scrollToBottom() {
+        const interval = setInterval(() => {
+            const scrollPosition = window.scrollY;
+            const scrollHeight = document.documentElement.scrollHeight;
+            window.scrollBy(0, 100);
+            if (scrollPosition + window.innerHeight >= scrollHeight) {
+                clearInterval(interval);
+                console.log("Chegou ao final da página.");
+            }
+        }, 100);
+    }
+
+    sleep(milliseconds) {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
     }
 }
 
