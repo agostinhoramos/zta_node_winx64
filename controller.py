@@ -18,29 +18,32 @@ def process_data():
     Process incoming JSON data, publish to MQTT broker, and return a response.
     """
     
-    data = request.get_json()
-
-    # Validate input data
-    if not data:
-        return jsonify({"error": "No JSON data provided"}), 400
-
-    response_data = data
-
     try:
+        
+        data = request.get_json(force=True)
+
+        # Validate input data
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+
+        decoded_data = json.loads(json.dumps(data), strict=False)
+        
         mqtt_manager.connect()
+        
         mqtt_topic = "/automationscam/process/set"
-        mqtt_payload = json.dumps(response_data)
+        mqtt_payload = decoded_data
         mqtt_manager.publish(mqtt_topic, mqtt_payload)
         mqtt_manager.stop()
+    
+    except json.JSONDecodeError as e:
+        return jsonify({"error": f"Invalid JSON data: {str(e)}"}), 400
 
     except Exception as e:
-        # Handle MQTT connection/publishing errors
-        error_message = f"Failed to publish data to MQTT broker: {e}"
+        error_message = f"Failed to process request: {str(e)}"
         print(error_message)
         return jsonify({"error": error_message}), 500
 
-    # Return the processed data as API response
-    return jsonify(response_data), 200
+    return jsonify(decoded_data), 200
 
 app.add_url_rule(
     "/process",

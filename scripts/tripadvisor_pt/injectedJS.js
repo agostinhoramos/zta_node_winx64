@@ -78,6 +78,25 @@ class ZTAutomation {
         return data;
     }
 
+    scrapeDataSearchListRest01(){
+        const data = [];
+        const elements = document.querySelectorAll('.SVuzf > div:nth-of-type(n+2)');
+
+        elements.forEach((el) => {
+            const linkElement = el.querySelector('.MMdJi a');
+            const nameElement = el.querySelector('a.FGwzt');
+
+            const link = linkElement ? linkElement.href : null;
+            const name = nameElement ? nameElement.innerText.trim() : null;
+
+            if (link || name) {
+                data.push({ link, name });
+            }
+        });
+
+        return data
+    }
+
     clickByText(text) { // Ver todos os detalhes
         const xpath = `//*[text()='${text}']`;
         const element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
