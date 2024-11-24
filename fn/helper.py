@@ -144,20 +144,22 @@ class WebAutomation:
 
     def type_special_characters(self, char):
         """Types characters considering special keys (like '{', '}', etc.)."""
-        if char == '{':
-            pag.hotkey('alt', 'ctrl', '7')
-        elif char == '}':
-            pag.hotkey('alt', 'ctrl', '0')
-        elif char == '[':
-            pag.hotkey('alt', 'ctrl', '8')
-        elif char == ']':
-            pag.hotkey('alt', 'ctrl', '9')
-        elif char == "'":
-            pag.press("'")
-        elif char == '"':
-            pag.hotkey('shift', '2')
+        special_keys = {
+            '{': ['alt', 'ctrl', '7'],
+            '}': ['alt', 'ctrl', '0'],
+            '[': ['alt', 'ctrl', '8'],
+            ']': ['alt', 'ctrl', '9'],
+            "'": ["'"],
+            '"': ['shift', '2']
+        }
+
+        if char in special_keys:
+            pag.hotkey(*special_keys[char])
         else:
-            pag.typewrite(char, interval=0.01)
+            try:
+                pag.typewrite(char, interval=0.01)
+            except Exception as e:
+                print(f"Error typing character {char}: {e}")
 
 class MQTTClientManager:
     """Handles MQTT operations: connect, publish, and subscribe."""
