@@ -17,20 +17,28 @@ class UserTask:
                 
                 MouseHandler.move_and_click(200, 780, click=True)
                 MouseHandler.move_and_click(385, 48, click=True)
-                pag.write("https://www.tripadvisor.pt/Restaurant_Review-g4914446-d25035356-Reviews-El_Pimenton-Amora_Setubal_District_Alentejo.html")
+                pag.write(data["target_url"])
                 pag.press('enter')
                 time.sleep(1)
                 MouseHandler.move_and_click(471, 149)
-                pag.press('end')
-                time.sleep(2)          
                 pag.hotkey('ctrl', 'shift', 'i')
                 time.sleep(1)
                 pag.hotkey('ctrl', 'l')
-
-                javascript_code = "$$zta.load()"
-                pag.typewrite(javascript_code, interval=0.01)
+                time.sleep(1)                
+                javascript_code = """
+                $$zta.load()
+                """
+                self.wa.execute_javascript_code(javascript_code.splitlines())
+                time.sleep(1)
+                javascript_code = """
+                const cj = JSON.parse($$zta.conf);
+                const sd = $$zta.scrapeData(cj.selectors);
+                $$zta.sendPostRequest($$zta.url, sd)
+                """
+                self.wa.execute_javascript_code(javascript_code.splitlines())
+                time.sleep(1)
                 pag.hotkey('enter')
-                time.sleep(2)
+                time.sleep(1)
                 pag.hotkey('alt', 'f4')
                 
             except json.JSONDecodeError:

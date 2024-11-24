@@ -1,10 +1,7 @@
 class ZTAutomation {
     constructor() {
         this.url = 'https://192.168.1.87:5000/process';  // Server URL
-    }
-
-    async load(){
-        const configuration = `{
+        this.conf = `{
             "_id": "tripadvisor_pt",
             "startUrl": ["https://www.tripadvisor.pt/Restaurant_Review-g4914446-d25035356-Reviews-El_Pimenton-Amora_Setubal_District_Alentejo.html"],
             "selectors": [
@@ -24,23 +21,11 @@ class ZTAutomation {
                 { "id": "classification_environment", "parentSelectors": ["_root"], "type": "SelectorText", "selector": "div:nth-of-type(4) div.JSTna", "multiple": false, "regex": "" }
             ]
         }`;
-        
-        const configurationJson = JSON.parse(configuration);
-        const selectors = configurationJson.selectors;
+    }
 
-        await $$zta.sleep(2000)
-
+    async load(){        
         $$zta.scrollToBottom();
-
         $$zta.clickByText("Ver todos os detalhes")
-
-        const sd = $$zta.scrapeData(selectors)
-        $$zta.sendPostRequest($$zta.url, sd).then(response => {
-            console.log('Server response:', response);
-        })
-        .catch(error => {
-            console.error('Error processing the request:', error);
-        });
     }
 
     // Sends a POST request to the server
@@ -110,7 +95,7 @@ class ZTAutomation {
             window.scrollBy(0, 100);
             if (scrollPosition + window.innerHeight >= scrollHeight) {
                 clearInterval(interval);
-                console.log("Chegou ao final da página.");
+                console.log("Scroll end of page.");
             }
         }, 100);
     }
