@@ -19,10 +19,11 @@ class UserTask:
                 MouseHandler.move_and_click(385, 48, click=True)
                 pag.write(data["target_url"])
                 pag.press('enter')
-                time.sleep(1)
+                time.sleep(1)                
                 MouseHandler.move_and_click(471, 149)
                 pag.hotkey('ctrl', 'shift', 'i')
-                time.sleep(1)
+                time.sleep(2)                
+                MouseHandler.move_and_click(134, 730, click=True)
                 pag.hotkey('ctrl', 'l')
                 time.sleep(1)     
                 
