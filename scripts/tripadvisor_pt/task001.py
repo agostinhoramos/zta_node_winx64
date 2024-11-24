@@ -27,12 +27,28 @@ class UserTask:
                 time.sleep(1)     
                 
                 if msg.topic == "/automationscam/process/t/0001":
-                    for _ in range(0, data["num_task"])
-                        javascript_code = """
-                        console.log("Hello WWW")
-                        """
+                    javascript_code = """
+                        const sb = $$zta.scrollToBottom;
+                        const gd = () => {
+                            const data = $$zta.scrapeDataSearchListRest01();
+                            $$zta.sendPostRequest($$zta.url, data);
+                        };
+                        const nx = () => {
+                            $$zta.clickByAttr("Página seguinte");
+                        };
+                    """
+                    self.wa.execute_javascript_code(javascript_code.splitlines())
+                    
+                    for _ in range(0, data["num_task"]):
+                        javascript_code = """sb()"""
                         self.wa.execute_javascript_code(javascript_code.splitlines())
-                        time.sleep(2)
+                        time.sleep(1)
+                        javascript_code = """gd()"""
+                        self.wa.execute_javascript_code(javascript_code.splitlines())
+                        time.sleep(1)
+                        javascript_code = """nx()"""
+                        self.wa.execute_javascript_code(javascript_code.splitlines())
+                        time.sleep(1)
                         
                     time.sleep(130)
                 
