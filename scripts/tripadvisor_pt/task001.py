@@ -34,7 +34,7 @@ class UserTask:
                             $$zta.sendPostRequest($$zta.url, data);
                         };
                         const nx = () => {
-                            $$zta.clickByAttr("Página seguinte");
+                            $$zta.clickByAttr(decodeURIComponent("P%C3%A1gina seguinte"))
                         };
                     """
                     self.wa.execute_javascript_code(javascript_code.splitlines())
