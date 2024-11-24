@@ -106,6 +106,17 @@ class ZTAutomation {
             console.error(`NOK: Element with text '${text}' not found.`);
         }
     }
+  
+    clickByAttr(text) {
+        
+        const element = document.querySelector(`[aria-label="${text}"]`);
+        
+        if (element) {
+            element.click();
+        } else {
+            console.error(`NOK: Element with aria-label '${text}' not found.`);
+        }
+    }    
 
     scrollToBottom() {
         const interval = setInterval(() => {
