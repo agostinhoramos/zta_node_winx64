@@ -28,10 +28,16 @@ def process_data():
 
         decoded_data = json.loads(json.dumps(data), strict=False)
         
+        payload = {
+            "process": "0000001", # TODO
+            "type": "list001",
+            "data": decoded_data
+        }
+        
         mqtt_manager.connect()
         
         mqtt_topic = "/automationscam/process/set"
-        mqtt_payload = decoded_data
+        mqtt_payload = payload
         mqtt_manager.publish(mqtt_topic, mqtt_payload)
         mqtt_manager.stop()
     
