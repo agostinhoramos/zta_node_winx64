@@ -144,13 +144,26 @@ class WebAutomation:
 
     def type_special_characters(self, char):
         """Types characters considering special keys (like '{', '}', etc.)."""
+        
         special_keys = {
-            'à': ['shift', '`', 'a'],
-            'á': ['shift', '´', 'a'],
-            'ã': ['~', 'a'],
-            'è': ['shift', '`', 'e'],
-            'é': ['´', 'e'],
-            'ê': ['shift', '^', 'e'],
+            'à': ['shift', '`', 'a'],  # Grave accent + 'a'
+            'á': ['shift', '´', 'a'],  # Acute accent + 'a'
+            'ã': ['~', 'a'],           # Tilde + 'a'
+            'è': ['shift', '`', 'e'],  # Grave accent + 'e'
+            'é': ['´', 'e'],           # Acute accent + 'e'
+            'ê': ['shift', '^', 'e'],  # Circumflex + 'e'
+            'í': ['shift', '´', 'i'],  # Acute accent + 'i'
+            'ó': ['shift', '´', 'o'],  # Acute accent + 'o'
+            'ô': ['shift', '^', 'o'],  # Circumflex + 'o'
+            'ú': ['shift', '´', 'u'],  # Acute accent + 'u'
+            'ç': ['altgr', 'c'],       # 'ç' with AltGr
+            'Ç': ['altgr', 'shift', 'c'],  # 'Ç' with AltGr + Shift
+            'À': ['shift', '`', 'A'],  # Grave accent + 'A'
+            'Á': ['shift', '´', 'A'],  # Acute accent + 'A'
+            'É': ['´', 'E'],           # Acute accent + 'E'
+            'Ê': ['shift', '^', 'E'],  # Circumflex + 'E'
+            'Ô': ['shift', '^', 'O'],  # Circumflex + 'O'
+            'Ú': ['shift', '´', 'U'],  # Acute accent + 'U'
         
             '{': ['alt', 'ctrl', '7'],
             '}': ['alt', 'ctrl', '0'],
