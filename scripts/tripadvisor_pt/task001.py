@@ -51,7 +51,7 @@ class UserTask:
                         self.wa.execute_javascript_code(javascript_code.splitlines())
                         time.sleep(1)
                         
-                    time.sleep(130)
+                    time.sleep(3)
                 
                 if msg.topic == "/automationscam/process/t/0002":           
                     javascript_code = """
