@@ -1,6 +1,6 @@
 class ZTAutomation {
     constructor() {
-        this.url = 'https://192.168.1.87:5000/process';  // Server URL
+        this.url = 'https://127.0.0.1:5000/process';  // Server URL
         this.conf = `{
             "_id": "tripadvisor_pt",
             "startUrl": ["https://www.tripadvisor.pt/Restaurant_Review-g4914446-d25035356-Reviews-El_Pimenton-Amora_Setubal_District_Alentejo.html"],
@@ -23,9 +23,82 @@ class ZTAutomation {
         }`;
     }
 
+    async OK(){
+        console.log('Script loaded >>>>');
+    }
+
+    async NOK(){
+        console.error('Error loading script >>>');
+    }
+
     async load(){        
         $$zta.scrollToBottom();
         $$zta.clickByText("Ver todos os detalhes")
+    }
+
+    clearAllCookies() {
+        const cookies = document.cookie.split(";");
+    
+        for (let cookie of cookies) {
+            const eqPos = cookie.indexOf("=");
+            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    
+            // Apaga o cookie definindo uma data de expiração no passado
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+        }
+        localStorage.clear();
+        console.log("All cookies cleared.");
+    }
+
+    randomFingerprint() {
+        // Gera valores aleatórios para os atributos
+        const randomUserAgent = `Mozilla/5.0 (Windows NT ${Math.floor(Math.random() * 10) + 1}.0; Win64; x64) AppleWebKit/${Math.random().toFixed(3).slice(2, 5)} (KHTML, like Gecko) Chrome/${Math.floor(Math.random() * 30) + 100}.0.0.0 Safari/${Math.random().toFixed(3).slice(2, 5)}`;
+        const randomLanguage = ["pt-PT", "en-US", "en-GB", "es-ES"][Math.floor(Math.random() * 4)];
+        const randomWidth = Math.floor(Math.random() * 800) + 1280;
+        const randomHeight = Math.floor(Math.random() * 400) + 720;
+    
+        // Modifica os atributos com valores aleatórios
+        Object.defineProperty(navigator, 'userAgent', {
+            get: () => randomUserAgent,
+            configurable: true
+        });
+    
+        Object.defineProperty(navigator, 'language', {
+            get: () => randomLanguage,
+            configurable: true
+        });
+    
+        Object.defineProperty(navigator, 'languages', {
+            get: () => [randomLanguage],
+            configurable: true
+        });
+    
+        Object.defineProperty(window.screen, 'width', {
+            get: () => randomWidth,
+            configurable: true
+        });
+    
+        Object.defineProperty(window.screen, 'height', {
+            get: () => randomHeight,
+            configurable: true
+        });
+    
+        Object.defineProperty(window.screen, 'availWidth', {
+            get: () => randomWidth,
+            configurable: true
+        });
+    
+        Object.defineProperty(window.screen, 'availHeight', {
+            get: () => randomHeight - 40,
+            configurable: true
+        });
+    
+        console.log("Random fingerprint applied:", {
+            userAgent: randomUserAgent,
+            language: randomLanguage,
+            screenWidth: randomWidth,
+            screenHeight: randomHeight
+        });
     }
 
     // Sends a POST request to the server
@@ -49,6 +122,8 @@ class ZTAutomation {
             console.error('Error sending request:', error);
             throw error; // Re-throws the error for external handling
         }
+
+        $$zta.randomFingerprint()
     }
 
     // Function to scrape data from the page based on selectors

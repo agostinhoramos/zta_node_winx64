@@ -1,7 +1,12 @@
 # Start
 
-sudo apt install python3.12-venv
+docker-compose up -d --build
+docker-compose down
+
+sudo apt install python3.12-venv -y
 sudo apt-get install python3-tk python3-dev -y
+
+python3.12 -m venv env
 
 source env/bin/activate
 env/bin/python -m pip install -r ./requirements.txt
@@ -10,3 +15,17 @@ python ./app.py
 
 # PIP
 pip freeze > requirements.txt
+
+
+DISPLAY=:0 celery -A process worker --loglevel=info
+DISPLAY=:0 python test.py
+
+sudo apt update
+sudo apt install xdotool
+
+https://chromewebstore.google.com/detail/inject-javascript-synced/aechnpkbeoilkginaangjabdhcknecck
+
+sudo locale-gen pt_PT.UTF-8
+sudo update-locale LANG=pt_PT.UTF-8
+export LANG=pt_PT.UTF-8
+# export LC_ALL=pt_PT.UTF-8

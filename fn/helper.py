@@ -109,6 +109,18 @@ class WebAutomation:
         self.file_full_path = None
         self.hash_file = None
         
+    def typeText(self, text, delay = 100, space = False, layout = 'us'):
+        escaped_text = text.replace('$', '\\$')
+        
+        if not space:
+            escaped_text = re.sub(r'\s+', ' ', escaped_text)
+            escaped_text = re.sub(r'\n+', '', escaped_text)
+            escaped_text = escaped_text.strip()
+        
+        command = f'xdotool type --delay {delay} "{escaped_text}"'
+        os.system(f'setxkbmap {layout}')
+        os.system(command)
+        
     def minify_js(self, javascript_code):
         """
         Minifies the provided JavaScript code by removing spaces, newlines, and unnecessary indentation.

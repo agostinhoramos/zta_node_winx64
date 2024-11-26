@@ -6,6 +6,4 @@ function injectScript(srcUrl) {
     document.head.appendChild(script);
     script.onload = () => console.log(`Script loaded: ${srcUrl}`);
     script.onerror = () => console.error(`Error loading script: ${srcUrl}`);
-}
-
-injectScript('https://192.168.1.87:5000/js/main.js');
+} injectScript('https://127.0.0.1:5000/js/main.js');

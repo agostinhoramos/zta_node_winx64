@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export DISPLAY=:0
+
+# DISPLAY=:0 celery -A process worker --loglevel=info
+
+python app.py

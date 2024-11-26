@@ -69,7 +69,7 @@ def remote_js():
     return response
 
 app.add_url_rule(
-    "/js/main.js",
+    "/m",
     view_func=remote_js,
     methods=['GET']
 )
