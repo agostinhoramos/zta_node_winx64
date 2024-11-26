@@ -18,6 +18,8 @@ pip freeze > requirements.txt
 
 
 DISPLAY=:0 celery -A process worker --loglevel=info
+DISPLAY=:0 celery -A process worker --pool=solo --loglevel=info
+
 DISPLAY=:0 python test.py
 
 sudo apt update
@@ -25,7 +27,5 @@ sudo apt install xdotool
 
 https://chromewebstore.google.com/detail/inject-javascript-synced/aechnpkbeoilkginaangjabdhcknecck
 
-sudo locale-gen pt_PT.UTF-8
-sudo update-locale LANG=pt_PT.UTF-8
-export LANG=pt_PT.UTF-8
-# export LC_ALL=pt_PT.UTF-8
+
+pip install --upgrade pyautogui Xlib

@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+pag.FAILSAFE = False
+
 class MouseHandler:
     """Handles mouse actions."""
     @staticmethod

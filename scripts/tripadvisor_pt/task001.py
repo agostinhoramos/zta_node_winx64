@@ -5,7 +5,7 @@ from process import chromeTask, chromeTaskRun, fakeUserMouseMove
 def inject_javascript(typeText):
     time.sleep(2)
     javascript_code = "const i=(e)=>{const t=document.createElement('script');t.src=e,t.type='text/javascript',t.async=!0,document.head.appendChild(t),t.onload=()=>$$zta.OK(),t.onerror=()=>$$zta.NOK()};i('https://127.0.0.1:5000/m');"
-    typeText(javascript_code, delay=180)
+    typeText(javascript_code, delay=230)
     pag.hotkey('enter')
     time.sleep(2)
 
@@ -84,6 +84,8 @@ class UserTask:
                         inject_javascript(self.wa.typeText)
                         addSnippets(self.wa.typeText)
                         
+                        fakeUserMouseMove.delay(move_count=34 * 3)
+                        
                         for _ in range(0, 34):
                             javascript_code = "sb();"
                             self.wa.typeText(javascript_code)
@@ -97,8 +99,6 @@ class UserTask:
                             self.wa.typeText(javascript_code)
                             pag.hotkey('enter')
                             time.sleep(1)
-                            
-                            fakeUserMouseMove.delay(move_count=3, delay=0.3)
                         
                         reopen = False                
                     
